@@ -7,13 +7,15 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
-
     User user;
-
+    User userempty;
+    User usermoney;
     @BeforeEach
     void setUp() {
         user = new User("Vester", "Carmen", "bsp@gmx.de",
                 "123", "456", 862437600, 1, 5000);
+        userempty = new User();
+        usermoney = new User("Test", 100);
     }
 
     @Test
@@ -22,6 +24,10 @@ class UserTest {
         String expected = "User{id=0, name=Vester, first name=Carmen, " +
                 "email=bsp@gmx.de, birthday=862437600, student=1, money=5000.0}";
         assertEquals(expected, toString);
+
+        String emptystring = userempty.toString();
+        String nullstring = "User{id=0, name=null, first name=null, email=null, birthday=0, student=0, money=0.0}";
+        assertEquals(nullstring, emptystring);
     }
 
     @Test
@@ -76,6 +82,9 @@ class UserTest {
     void getFloat_money_amount() {
         float money = user.getFloat_money_amount();
         assertEquals(5000, money);
+
+        float money2 = usermoney.getFloat_money_amount();
+        assertEquals(100, money2);
     }
 
     @Test
