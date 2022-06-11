@@ -8,13 +8,12 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-/**
+/*
  * Automatically create Getter and Setter methods.
  */
 @Entity
 @Getter
 @Setter
-@Table(name = "tbl_user")
 public class User {
     /**
     * Constructors for the class User.
