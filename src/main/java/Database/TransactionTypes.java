@@ -1,8 +1,8 @@
 package Database;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -16,42 +16,18 @@ public class TransactionTypes {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    @Setter(AccessLevel.NONE)
     private UUID id;
 
     @NotBlank(message = "Transaction Type Description is mandatory")
     private String str_trx_desc_EN;
 
-    // Defines weather it is income or outcome 0 = Expense, 1 = Income
+    // Defines weather it is income or Outcone 0 = Expense, 1 = Income
     @NotBlank(message = "Income qualifier is mandatory")
     private int bool_income;
 
-    // TODO foreign Key
+    // TODO foreign KEy
     @NotBlank(message = "User foreign Key is mandatory")
-    @Setter(AccessLevel.NONE)
-    private UUID uuid_user_id_fk;
+    private int int_user_id_fk;
 
 
-    public TransactionTypes(UUID trxId, int bool_income, UUID userId) {
-        this.id=trxId;
-        this.bool_income=bool_income;
-        this.uuid_user_id_fk=userId;
-    }
-
-    public TransactionTypes() {
-
-    }
-
-    public TransactionTypes(UUID trxId, String str_trx_desc_EN,int bool_income, UUID userId) {
-        this.id=trxId;
-        this.str_trx_desc_EN=str_trx_desc_EN;
-        this.bool_income=bool_income;
-        this.uuid_user_id_fk=userId;
-    }
-
-    @Override
-    public String toString() {
-        return "TransactionType{UUID=" + id.toString() + ", trx-desc=" + str_trx_desc_EN +
-                ", is-income=" + bool_income + ", User-UUID=" + uuid_user_id_fk.toString() + "}";
-    }
 }
