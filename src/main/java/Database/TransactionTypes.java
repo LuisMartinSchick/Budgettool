@@ -11,7 +11,6 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@Table(name = "tbl_transaction_types")
 public class TransactionTypes {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,7 +21,8 @@ public class TransactionTypes {
     @NotBlank(message = "Transaction Type Description is mandatory")
     private String str_trx_desc_EN;
 
-    // Defines weather it is income or outcome 0 = Expense, 1 = Income
+    // Defines whether it is income or outcome
+    // 0 = Expense, 1 = Income
     @NotBlank(message = "Income qualifier is mandatory")
     private int bool_income;
 
@@ -38,15 +38,15 @@ public class TransactionTypes {
         this.uuid_user_id_fk=userId;
     }
 
-    public TransactionTypes() {
-
-    }
-
     public TransactionTypes(UUID trxId, String str_trx_desc_EN,int bool_income, UUID userId) {
         this.id=trxId;
         this.str_trx_desc_EN=str_trx_desc_EN;
         this.bool_income=bool_income;
         this.uuid_user_id_fk=userId;
+    }
+
+    public TransactionTypes() {
+
     }
 
     @Override

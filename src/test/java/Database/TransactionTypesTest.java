@@ -11,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TransactionTypesTest {
 
     TransactionTypes tt;
+    TransactionTypes ttEmpty;
+    TransactionTypes ttPartial;
     User u1;
     UUID uuidTt;
     UUID uuidUser;
@@ -22,6 +24,8 @@ class TransactionTypesTest {
         uuidTt = UUID.randomUUID();
         uuidUser = UUID.randomUUID();
         tt = new TransactionTypes(uuidTt, "Test", 1, uuidUser);
+        ttEmpty = new TransactionTypes();
+        ttPartial = new TransactionTypes(uuidTt, 1, uuidUser);
     }
 
     @AfterEach
