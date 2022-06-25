@@ -1,61 +1,53 @@
 package Database;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-/**
- * Automatically create Getter and Setter methods.
- */
+import java.util.UUID;
+
 @Entity
 @Getter
 @Setter
 @Table(name = "tbl_transactions")
 public class Transaction {
-    /**
-     * Constructors for the class Transaction.
-     * */
-    public Transaction() {}
-
-    public Transaction(int int_user_id_fk,
-                       float float_value,
-                       int int_try_type_fkype
-    ) {
-        this.int_user_id_fk = int_user_id_fk;
-        this.float_value = float_value;
-        this.int_try_type_fkype = int_try_type_fkype;
-    }
-    /**
-     * Variables for the Transaction class.
-     * */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    @Setter(AccessLevel.NONE)
-    private long id;
+    private UUID id;
 
     @NotBlank(message = "User foreign Key is mandatory")
-    @Setter(AccessLevel.NONE)
-    private long int_user_id_fk;
+    private UUID uuidUserIdFk;
 
     @Column(nullable = false, columnDefinition = "Amount of money in the transaction")
     @NotBlank(message = "Value is mandatory")
-    private float float_value;
+    private float floatValue;
 
     // TODO foreign key
     @NotBlank(message = "Transaction Type foreign Key is mandatory")
-    private int int_try_type_fkype;
+    private int intTrxTypeFk;
+
+    public Transaction(UUID id, UUID userID, float floatAmount, int intTrxTypeFk) {
+        this.id=id;
+        this.uuidUserIdFk=userID;
+        this.floatValue=floatAmount;
+        this.intTrxTypeFk=intTrxTypeFk;
+    }
+
+    public Transaction() {
+
+    }
+
     /**
      * The toString method for the class Transaction.
      *
      * @return a String of the variables of the Transaction-object.
      */
     public String toString() {
-        return "Transaction{id=" + id +
-                ", user-id=" + int_user_id_fk +
-                ", money=" + float_value +
-                ", type=" + int_try_type_fkype + "}";
+        return "Transaction{id=" + id.toString() +
+                ", user-id=" + uuidUserIdFk.toString() +
+                ", money=" + floatValue +
+                ", type=" + intTrxTypeFk + "}";
     }
 }

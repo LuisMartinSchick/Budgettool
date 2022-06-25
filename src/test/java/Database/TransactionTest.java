@@ -3,63 +3,74 @@ package Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.validation.constraints.NotBlank;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TransactionTest {
 
     Transaction transaction;
-    Transaction transactionempty;
+    Transaction transactionEmpty;
+    UUID trxId;
+    UUID userId;
+
 
     @BeforeEach
     void setUp() {
-        transaction = new Transaction(1, 500, 1);
-        transactionempty = new Transaction();
+        trxId = UUID.randomUUID();
+        userId = UUID.randomUUID();
+        transaction = new Transaction(trxId, userId, 500, 1);
+        transactionEmpty = new Transaction();
     }
 
     @Test
     void testToString() {
         String toString = transaction.toString();
-        String expected = "Transaction{id=0, user-id=1, money=500.0, type=1}";
+        String expected = "Transaction{id=" + trxId.toString() + ", user-id=" + userId.toString() + ", money=500.0, type=1}";
         assertEquals(expected, toString);
+        Exception exception = assertThrows(NullPointerException.class, () -> {
+            String emptyString = transactionEmpty.toString();
+        });
 
-        String emptystring = transactionempty.toString();
-        String nullstring = "Transaction{id=0, user-id=0, money=0.0, type=0}";
-        assertEquals(nullstring, emptystring);
+        String nullstring = "Cannot invoke \"java.util.UUID.toString()\" because \"this.id\" is null";
+        assertEquals(nullstring, exception.getMessage());
+
     }
 
     @Test
     void getId() {
-        long expected = transaction.getId();
-        assertEquals(0, expected);
+        UUID expected = transaction.getId();
+        assertEquals(expected, trxId);
     }
 
     @Test
     void getInt_user_id_fk() {
-        long expected = transaction.getInt_user_id_fk();
-        assertEquals(1, expected);
+        UUID expected = transaction.getUuidUserIdFk();
+        assertEquals(expected, userId);
     }
 
     @Test
     void getFloat_value() {
-        float expected = transaction.getFloat_value();
+        float expected = transaction.getFloatValue();
         assertEquals(500.0, expected);
     }
 
     @Test
     void getInt_try_type_fkype() {
-        int expected = transaction.getInt_try_type_fkype();
+        int expected = transaction.getIntTrxTypeFk();
         assertEquals(1, expected);
     }
 
     @Test
     void setFloat_value() {
-        transaction.setFloat_value(5000.0f);
-        assertEquals(5000.0f, transaction.getFloat_value());
+        transaction.setFloatValue(5000.0f);
+        assertEquals(5000.0f, transaction.getFloatValue());
     }
 
     @Test
     void setInt_try_type_fkype() {
-        transaction.setInt_try_type_fkype(2);
-        assertEquals(2, transaction.getInt_try_type_fkype());
+        transaction.setIntTrxTypeFk(2);
+        assertEquals(2, transaction.getIntTrxTypeFk());
     }
 }
