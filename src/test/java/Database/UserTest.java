@@ -3,16 +3,20 @@ package Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
     User user;
     User userempty;
     User usermoney;
+    UUID userID;
     @BeforeEach
     void setUp() {
+        userID = UUID.randomUUID();
         user = new User("Vester", "Carmen", "bsp@gmx.de",
-                "123", "456", 862437600, 1, 5000);
+                "123", "456", 862437600, 1, 5000, userID);
         userempty = new User();
         usermoney = new User("Test", 100);
     }
@@ -20,19 +24,19 @@ class UserTest {
     @Test
     void testToString() {
         String toString = user.toString();
-        String expected = "User{id=0, name=Vester, first name=Carmen, " +
+        String expected = "User{id="+userID.toString()+", name=Vester, first name=Carmen, " +
                 "email=bsp@gmx.de, birthday=862437600, student=1, money=5000.0}";
         assertEquals(expected, toString);
 
         String emptystring = userempty.toString();
-        String nullstring = "User{id=0, name=null, first name=null, email=null, birthday=0, student=0, money=0.0}";
+        String nullstring = "User{id=null, name=null, first name=null, email=null, birthday=0, student=0, money=0.0}";
         assertEquals(nullstring, emptystring);
     }
 
     @Test
     void getId() {
-        long id = user.getId();
-        assertEquals(0, id);
+        UUID id = user.getId();
+        assertEquals(userID, id);
     }
 
     @Test

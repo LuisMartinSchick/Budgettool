@@ -8,6 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
+
 /*
  * Automatically create Getter and Setter methods.
  */
@@ -16,9 +18,10 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class User {
     /**
-    * Constructors for the class User.
-    * */
-    public User() {}
+     * Constructors for the class User.
+     */
+    public User() {
+    }
 
     public User(String name,
                 String first_name,
@@ -39,18 +42,39 @@ public class User {
     }
 
     public User(String name,
+                String first_name,
+                String email,
+                String password_hash,
+                String password_salt,
+                int birthday,
+                int student,
+                float money,
+                UUID id){
+        this.txt_name = name;
+        this.txt_first_name = first_name;
+        this.txt_email = email;
+        this.txt_password_hash = password_hash;
+        this.txt_password_salt = password_salt;
+        this.dat_unix_birthday = birthday;
+        this.bool_student = student;
+        this.float_money_amount = money;
+        this.id = id;
+    }
+
+    public User(String name,
                 float money) {
         this.txt_name = name;
         this.float_money_amount = money;
     }
+
     /**
-    * Variables for the user class.
-    * */
+     * Variables for the user class.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, columnDefinition = "User ID")
     @Setter(AccessLevel.NONE)
-    private long id;
+    private UUID id;
 
     @NotNull(message = "Must not be null")
     @Column(nullable = false, columnDefinition = "User name")
@@ -83,6 +107,7 @@ public class User {
 
     /**
      * The toString method for the class User.
+     *
      * @return a String of the variables of the User-object.
      */
     @Override

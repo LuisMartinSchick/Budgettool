@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 @Value
 public class UserResource {
     /**
-     * Constructors for the class UserRepository.
+     * Constructors for the class UserResource.
      * */
        public UserResource(@JsonProperty("name") String name,
                 @JsonProperty("first-name") String first_name,
@@ -28,7 +28,7 @@ public class UserResource {
         this.float_money_amount = money;
     }
     /**
-     * Variables for the UserRepository class.
+     * Variables for the UserResource class.
      * */
     @NotNull
     private String txt_name;
@@ -51,5 +51,6 @@ public class UserResource {
     @NotNull
     private int bool_student;
 
+    @NotNull
     private float float_money_amount;
 }

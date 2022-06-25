@@ -1,7 +1,7 @@
 package Controller;
 
+import Database.MockDatabase;
 import Database.User;
-import Repository.UserRepository;
 import Resources.UserResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,21 +10,22 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    private final UserRepository userRepository;
+
+    private final MockDatabase mockDatabase;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(MockDatabase mockDatabase) {
+        this.mockDatabase = mockDatabase;
     }
 
     //Registirerung neuer User
-
     @PostMapping("/adduser")
-    UserResource register (@Valid @RequestBody UserResource userResource) {
+    String adduser (@Valid @RequestBody UserResource userResource) {
         User user = new User(userResource.getTxt_name(),
                 userResource.getTxt_first_name(),
                 userResource.getTxt_email(),
@@ -34,36 +35,32 @@ public class UserController {
                 userResource.getBool_student(),
                 userResource.getFloat_money_amount());
 
-        return new UserResource(
-                user.getTxt_name(),
-                user.getTxt_first_name(),
-                user.getTxt_email(),
-                user.getTxt_password_hash(),
-                user.getTxt_password_salt(),
-                user.getDat_unix_birthday(),
-                user.getBool_student(),
-                user.getFloat_money_amount()
-        );
+        mockDatabase.saveUser(user);
+        String redirect = "rediret:/user/" + user.getId();
+        return redirect;
     }
 
     @GetMapping("/index")
-    public String showUserList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+    public String showUserList() {
+        mockDatabase.findAllUsers();
         return "index";
     }
 
+    @GetMapping("/{id}")
+    public String showUserById(@PathVariable("id") UUID id) {
+        mockDatabase.findUserById(id);
+        return "user/id";
+    }
+
     @PostMapping("/update/{id}")
-    public String updateUser(@PathVariable("id") long id, @Valid User user,
-                             BindingResult result, Model model) {
-        userRepository.save(user);
+    public String updateUser(@PathVariable("id") UUID id, @Valid User user) {
+        mockDatabase.saveUser(user);
         return "redirect:/index";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-        userRepository.delete(user);
+    public String deleteUser(@PathVariable("id") UUID id) {
+        mockDatabase.deleteUserById(id);
         return "redirect:/index";
     }
 }
