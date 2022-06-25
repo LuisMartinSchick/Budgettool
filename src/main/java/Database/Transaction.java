@@ -26,13 +26,13 @@ public class Transaction {
 
     // TODO foreign key
     @NotBlank(message = "Transaction Type foreign Key is mandatory")
-    private int intTrxTypeFk;
+    private UUID uuidTrxTypeFk;
 
-    public Transaction(UUID id, UUID userID, float floatAmount, int intTrxTypeFk) {
+    public Transaction(UUID id, UUID userID, float floatAmount, UUID uuidTrxTypeFk) {
         this.id=id;
         this.uuidUserIdFk=userID;
         this.floatValue=floatAmount;
-        this.intTrxTypeFk=intTrxTypeFk;
+        this.uuidTrxTypeFk = uuidTrxTypeFk;
     }
 
     public Transaction() {
@@ -48,6 +48,6 @@ public class Transaction {
         return "Transaction{id=" + id.toString() +
                 ", user-id=" + uuidUserIdFk.toString() +
                 ", money=" + floatValue +
-                ", type=" + intTrxTypeFk + "}";
+                ", type=" + uuidTrxTypeFk + "}";
     }
 }

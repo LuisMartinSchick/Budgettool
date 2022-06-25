@@ -3,7 +3,6 @@ package Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,20 +13,25 @@ class TransactionTest {
     Transaction transactionEmpty;
     UUID trxId;
     UUID userId;
+    UUID trxTypeId;
+    UUID trxTypeIdAlternative;
 
 
     @BeforeEach
     void setUp() {
         trxId = UUID.randomUUID();
         userId = UUID.randomUUID();
-        transaction = new Transaction(trxId, userId, 500, 1);
+        trxTypeId = UUID.randomUUID();
+        trxTypeIdAlternative = UUID.randomUUID();
+        transaction = new Transaction(trxId, userId, 500, trxTypeId);
         transactionEmpty = new Transaction();
     }
 
     @Test
     void testToString() {
         String toString = transaction.toString();
-        String expected = "Transaction{id=" + trxId.toString() + ", user-id=" + userId.toString() + ", money=500.0, type=1}";
+        String expected = "Transaction{id=" + trxId.toString() + ", user-id=" + userId.toString() +
+                ", money=500.0, type=" + trxTypeId.toString() + "}";
         assertEquals(expected, toString);
         Exception exception = assertThrows(NullPointerException.class, () -> {
             String emptyString = transactionEmpty.toString();
@@ -35,7 +39,6 @@ class TransactionTest {
 
         String nullstring = "Cannot invoke \"java.util.UUID.toString()\" because \"this.id\" is null";
         assertEquals(nullstring, exception.getMessage());
-
     }
 
     @Test
@@ -57,9 +60,9 @@ class TransactionTest {
     }
 
     @Test
-    void getInt_try_type_fkype() {
-        int expected = transaction.getIntTrxTypeFk();
-        assertEquals(1, expected);
+    void getUuid_try_type_fkype() {
+        UUID expected = transaction.getUuidTrxTypeFk();
+        assertEquals(expected, trxTypeId);
     }
 
     @Test
@@ -70,7 +73,7 @@ class TransactionTest {
 
     @Test
     void setInt_try_type_fkype() {
-        transaction.setIntTrxTypeFk(2);
-        assertEquals(2, transaction.getIntTrxTypeFk());
+        transaction.setUuidTrxTypeFk(trxTypeIdAlternative);
+        assertEquals(trxTypeIdAlternative, transaction.getUuidTrxTypeFk());
     }
 }
