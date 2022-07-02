@@ -2,6 +2,9 @@ package Controller;
 
 import Database.MockDatabase;
 import Database.TransactionTypes;
+import Summary.ChangeBudgetType;
+import Summary.Einmalige_Zahlung;
+import Summary.Monatliche_Zahlung;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -15,6 +18,7 @@ import javax.validation.Valid;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Controller
@@ -41,6 +45,13 @@ public class TransactionTypesController {
         CollectionModel<TransactionTypes> result = CollectionModel.of(allTypes);
         return result;
     }
+
+    @PostMapping("/changeStrategy/{id}/{name}")
+        public String changeStrategy(@PathVariable("id")UUID id, @PathVariable("name") String Type){
+              mockDatabase.changeStrategy(id,Type);
+         return "redirect:/index";
+        }
+
 
     /* @GetMapping("/{id}")
     public TransactionTypes fetchTransactionTypeById(@PathVariable int id) {

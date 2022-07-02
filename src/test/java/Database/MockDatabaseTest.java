@@ -1,5 +1,6 @@
 package Database;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -112,6 +113,12 @@ class MockDatabaseTest {
         database.saveTransaction(transaction2);
         assertEquals(transaction2, database.findTransactionById(trxId2));
     }
+    @Test
+    void getTransactionTypeToTransaction(){
+        database.saveTransactionType(tt1);
+       database.saveTransaction(transaction1);
+        assertEquals(tt1, database.getTransactionTypeToTransaction(transaction1));
+    }
 
     @Test
     void deleteTransactionById() {
@@ -143,5 +150,41 @@ class MockDatabaseTest {
         assertEquals("Transaction Type was deleted", database.deleteTransactionTypeById(trxTypeId));
         assertEquals("No Transaction Type with that ID was found", database.deleteTransactionTypeById(trxTypeId));
 
+    }
+
+    @Test
+    void changeStrategy() {
+        database.saveTransactionType(tt1);
+        assertEquals("Die Strategie wurde auf eine monatliche Zahlung gesetzt", database.changeStrategy(trxTypeId, "monatlich"));
+        assertEquals("Eine solcheStrategy ist nicht bekannt", database.changeStrategy(trxTypeId, "Das sollte nicht funktionieren"));
+        //feststellen, dass sie auch wirklich geändert wurde
+        TransactionTypes transactionType = database.findTransactionTypeById(trxTypeId);
+        assertEquals("MonthlyPayment", transactionType.getStrategy().fetchTransactionType());
+
+        assertEquals("Die Strategie wurde auf eine einmalige Zahlung gesetzt", database.changeStrategy(trxTypeId, "einmalig"));
+        assertEquals("SinglePayment", transactionType.getStrategy().fetchTransactionType());
+    }
+
+    @Test
+    void cleanDatabase() {
+        database.saveTransactionType(tt1);
+        database.saveUser(user1);
+        database.saveTransaction(transaction1);
+
+        database.cleanDatabase();
+
+        assertTrue(database.findAllUsers().isEmpty());
+        assertTrue(database.findAllTransactions().isEmpty());
+        assertTrue(database.findAllTransactionTypes().isEmpty());
+    }
+
+    @Test
+    void  findTransactionsByUserId() {
+        database.saveTransactionType(tt1);
+        database.saveUser(user1);
+        database.saveTransaction(transaction1);
+        List<Transaction> testList =new ArrayList<Transaction>();
+        testList.add(transaction1);
+        assertEquals(testList,database.findTransactionsByUserId(userId1));
     }
 }

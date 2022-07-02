@@ -73,4 +73,6 @@ class TransactionTypesTest {
         assertEquals("Test2", tt.getStr_trx_desc_EN());
     }
 
+
+
 }

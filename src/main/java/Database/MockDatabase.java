@@ -1,5 +1,9 @@
 package Database;
 
+import Summary.Einmalige_Zahlung;
+import Summary.Monatliche_Zahlung;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -57,6 +61,16 @@ public class MockDatabase {
         return trxList;
     }
 
+    public List<Transaction> findTransactionsByUserId(UUID userId){
+        List<Transaction> ausgabeListe = new ArrayList<Transaction>();
+
+        for(Transaction t : trxList){
+            if(t.getUuidUserIdFk() == userId)
+                ausgabeListe.add(t);
+        }
+        return ausgabeListe;
+    }
+
     public Transaction findTransactionById(UUID id) {
         Transaction transactionResult = null;
             for (Transaction transaction : trxList) {
@@ -98,6 +112,10 @@ public class MockDatabase {
         return ttResult;
     }
 
+    public TransactionTypes getTransactionTypeToTransaction(Transaction transaction){
+        return findTransactionTypeById(transaction.getUuidTrxTypeFk());
+    }
+
     public String deleteTransactionTypeById(UUID id) {
         for (TransactionTypes tt : trxTypesList) {
             if (tt.getId().equals(id)) {
@@ -108,9 +126,23 @@ public class MockDatabase {
         return "No Transaction Type with that ID was found";
     }
 
+    public String changeStrategy(UUID id,  String Type) {
+        TransactionTypes transactionType = findTransactionTypeById(id);
+        if (Type == "einmalig") {
+            transactionType.setStrategy(new Einmalige_Zahlung());
+            return "Die Strategie wurde auf eine einmalige Zahlung gesetzt";
+        } else if (Type == "monatlich") {
+            transactionType.setStrategy(new Monatliche_Zahlung());
+            return "Die Strategie wurde auf eine monatliche Zahlung gesetzt";
+        }
+        return "Eine solcheStrategy ist nicht bekannt";
+    }
+
     public void cleanDatabase() {
         userList.removeAll(userList);
         trxList.removeAll(trxList);
         trxTypesList.removeAll(trxTypesList);
     }
+
+
 }
