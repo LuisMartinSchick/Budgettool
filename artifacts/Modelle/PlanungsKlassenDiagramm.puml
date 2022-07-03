@@ -1,0 +1,142 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+
+
+TimeController <--- Database
+
+
+
+note "this is a singelton" as N1
+TimeController.N1
+class TimeController{
+advanceTime
+}
+
+package Model{
+    class Transaction
+    class TransactionTypes{
+    id
+    str_trx_desc
+    bool_income
+    uuid_user_id_fk
+    ChangeBudgetType Strategy
+    }
+
+    class User{
+            String name,
+                    String first_name,
+                    String email,
+                    String password_hash,
+                    String password_salt,
+                    int birthday,
+                    int student,
+                    float money
+    }
+
+    class Transaction{
+    UUID id,
+     UUID userID,
+      float floatAmount,
+      UUID uuidTrxTypeFk
+    }
+
+    User --|> Database
+    Transaction --|> Database
+    TransactionTypes --|> Database
+    Transaction --> User
+    Transaction --|> TransactionTypes
+    class Database{
+        Table Users
+        Table TransactionTypes
+        Table Transactions
+    }
+
+    class TransactionTypes{
+    UUID trxUuid,
+    String strTrxName,
+    int isIncome,
+    UUID uuidUser,
+    ChangeBudgetType strategy
+    }
+
+}
+
+
+package "Controller "{
+class TransactionController
+Transaction --> TransactionController
+User --> UserController
+TransactionTypes --> TransactionTypesController
+}
+package ViewMitTemplateMethod{
+    abstract class FrontendTemplate{
+    gemeinsame Inhalte
+    Button weiter
+    Button zurück
+    }
+    UserController--> FrontendTemplate
+    TransactionController --> FrontendTemplate
+    TransactionController --> FrontendTemplate
+    class TransaktionErfassen{
+    beinhaltet Element zur ERfassung neuer Transaktionen
+    }
+    TransaktionErfassen -up-|> FrontendTemplate
+     Einkommensmaske -up-|>TransaktionErfassen
+     class Einkommensmaske{
+        Erstellt Transaktionen, die Automatisch positiv sind
+     }
+     Ausgabenmaske -up-|> TransaktionErfassen
+     class Ausgabenmaske{
+        Erstellt Transaktionen, die Automatisch negativ sind
+     }
+      Haushaltsausgaben -up-|> Ausgabenmaske
+      class Haushaltsausgaben{
+      TransactionType Haushaltsausgaben
+      }
+      Lebenskosten -up-|> Ausgabenmaske
+      class Lebenskosten {
+      TransactionType Lebenskosten
+      }
+      Finanzen -up-|> Ausgabenmaske
+      class Finanzen{
+         TransactionType Finanzinvestitionen
+      }
+      Freizeit -up-|> Ausgabenmaske
+         class Freizeit{
+               TransactionType Freizeit
+            }
+     TimeController --> Analysemaske
+     Analysemaske -up-|> FrontendTemplate
+
+}
+
+package "StrategyPatten"{
+interface ChangeBudgetType{
+ UUID id
+ float calculateAddedValue(float value);
+    public String fetchTransactionType();
+}
+
+class Monatliche_Zahlung{
+float calculateAddedValue(float value);
+    public String fetchTransactionType();
+    }
+class Einmalige_Zahlung
+{
+boolean isActive
+float calculateAddedValue(float value);
+    public String fetchTransactionType();
+    }
+
+
+
+
+
+ChangeBudgetType <|-- Monatliche_Zahlung
+ChangeBudgetType  <|-- Einmalige_Zahlung
+
+TransactionTypes --> ChangeBudgetType
+
+@enduml
